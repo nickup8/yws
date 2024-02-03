@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rule;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -21,7 +22,10 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        $rules = Rule::all();
+        return Inertia::render('Auth/Register', [
+            'rules' => $rules
+        ]);
     }
 
     /**
@@ -33,13 +37,17 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'lastname' => 'required|string|max:255',
+            'login' => 'required|unique:users',
+            'rule_id' => 'required|string|max:255',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'lastname' => $request->lastname,
+            'login' => $request->login,
+            'rule_id' => $request->rule_id,
             'password' => Hash::make($request->password),
         ]);
 
