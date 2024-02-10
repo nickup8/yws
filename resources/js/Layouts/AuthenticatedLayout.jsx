@@ -4,30 +4,51 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
+import { Sidebar } from "@/Components/Sidebar";
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
-    console.log(user);
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav className="bg-white border-b border-gray-100 fixed top-0 w-full">
+                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
+                                <button className="mr-3">
+                                    <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M24 11.0005H0V13.0005H24V11.0005Z"
+                                            fill="#00000E"
+                                        />
+                                        <path
+                                            d="M24 4.00024H0V6.00024H24V4.00024Z"
+                                            fill="#00000E"
+                                        />
+                                        <path
+                                            d="M24 18H0V20H24V18Z"
+                                            fill="#00000E"
+                                        />
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Dashboard
-                                </NavLink>
+                                        <defs>
+                                            <clipPath id="clip0_46_9">
+                                                <rect
+                                                    width="20"
+                                                    height="20"
+                                                    fill="white"
+                                                />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </button>
+                                <ApplicationLogo className="block h-auto w-32 fill-current text-gray-800" />
                             </div>
                         </div>
 
@@ -40,9 +61,15 @@ export default function Authenticated({ user, header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                {user.name +
-                                                    " " +
-                                                    user.lastname}
+                                                <span className="w-10 h-10 flex items-center justify-center bg-gray-200 rounded-full mr-2 font-bold">
+                                                    {user.name[0] +
+                                                        user.lastname[0]}
+                                                </span>
+                                                <span>
+                                                    {user.name +
+                                                        " " +
+                                                        user.lastname}
+                                                </span>
 
                                                 <svg
                                                     className="ms-2 -me-0.5 h-4 w-4"
@@ -64,21 +91,21 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Link
                                             href={route("profile.edit")}
                                         >
-                                            Profile
+                                            Профиль
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route("logout")}
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            Выйти
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
                         </div>
 
-                        <div className="-me-2 flex items-center sm:hidden">
+                        {/* <div className="-me-2 flex items-center sm:hidden">
                             <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
@@ -117,7 +144,7 @@ export default function Authenticated({ user, header, children }) {
                                     />
                                 </svg>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
@@ -127,22 +154,22 @@ export default function Authenticated({ user, header, children }) {
                         " sm:hidden"
                     }
                 >
-                    <div className="pt-2 pb-3 space-y-1">
+                    {/* <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
                             href={route("dashboard")}
                             active={route().current("dashboard")}
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                    </div>
+                    </div> */}
 
-                    <div className="pt-4 pb-1 border-t border-gray-200">
+                    {/* <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
                             <div className="font-medium text-base text-gray-800">
                                 {user.name}
                             </div>
                             <div className="font-medium text-sm text-gray-500">
-                                {user.email}
+                                {user.login}
                             </div>
                         </div>
 
@@ -158,19 +185,24 @@ export default function Authenticated({ user, header, children }) {
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </nav>
 
-            {header && (
+            {/* {header && (
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {header}
                     </div>
                 </header>
-            )}
+            )} */}
 
-            <main>{children}</main>
+            <div className="flex pt-16">
+                <Sidebar />
+                <main className="w-full grow h-screen overflow-auto">
+                    {children}
+                </main>
+            </div>
         </div>
     );
 }

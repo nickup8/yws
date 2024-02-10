@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('lastname');
             $table->renameColumn('login', 'email');
-            $table->dropForeignIdFor(Rule::class);
+            $table->dropColumn('rule_id');
         });
     }
 };
