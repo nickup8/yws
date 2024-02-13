@@ -58,7 +58,10 @@ class SupplierController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $supplier = Supplier::find($id);
+        return Inertia::render('Suppliers/Supplierpage', [
+            'supplier' => $supplier
+        ]);
     }
 
     /**
@@ -66,15 +69,32 @@ class SupplierController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $supplier = Supplier::find($id);
+        return Inertia::render('Suppliers/SupplierNew', [
+            'supplier' => $supplier
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SupplierRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        $supplier = Supplier::find($id);
+        $supplier->update([
+            'code' => $data['code'],
+            'title' => $data['title'],
+            'address' => $data['address'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'fact_address' => $data['fact_address'],
+            'inn' => $data['inn'],
+            'contact_person' => $data['contact_person'],
+            'comment' => $data['comment'],
+            'ogrn' => $data['ogrn']
+        ]);
+        return redirect('/suppliers');
     }
 
     /**

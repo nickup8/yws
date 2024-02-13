@@ -6,33 +6,50 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { H1 } from "@/Components/Typography/H1";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function SupplierNew({ auth }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        code: "",
-        inn: "",
-        title: "",
-        address: "",
-        phone: "",
-        email: "",
-        comment: "",
-        fact_address: "",
-        contact_person: "",
-        ogrn: "",
+export default function SupplierNew({ auth, supplier }) {
+    const {
+        data,
+        setData,
+        post,
+        patch,
+        processing,
+        errors,
+        reset,
+        setDefaults,
+    } = useForm({
+        code: supplier && supplier.code ? supplier.code : "",
+        inn: supplier && supplier.inn ? supplier.inn : "",
+        title: supplier && supplier.title ? supplier.title : "",
+        address: supplier && supplier.address ? supplier.address : "",
+        phone: supplier && supplier.phone ? supplier.phone : "",
+        email: supplier && supplier.email ? supplier.email : "",
+        comment: supplier && supplier.comment ? supplier.comment : "",
+        fact_address:
+            supplier && supplier.fact_address ? supplier.fact_address : "",
+        contact_person:
+            supplier && supplier.contact_person ? supplier.contact_person : "",
+        ogrn: supplier && supplier.ogrn ? supplier.ogrn : "",
     });
 
     const onSubmit = (e) => {
         e.preventDefault();
+
         post(route("suppliers.store"));
+    };
+
+    const onUpdate = (e) => {
+        e.preventDefault();
+        patch(route("suppliers.update", supplier.id));
     };
     return (
         <Authenticated user={auth.user}>
-            <Head title="Новый поставщик" />
+            <Head title={supplier ? supplier.title : "Новый поставщик"} />
             <Container>
-                <H1>Новый поставщик</H1>
+                <H1>{supplier ? supplier.title : "Новый поставщик"}</H1>
                 <Paper className="w-2/4">
-                    <form noValidate onSubmit={onSubmit}>
+                    <form noValidate onSubmit={supplier ? onUpdate : onSubmit}>
                         <div className="flex justify-between gap-3">
                             <div className="w-full">
                                 <InputLabel required hfor="code">
@@ -219,13 +236,16 @@ export default function SupplierNew({ auth }) {
                                 className="mt-2"
                             />
                         </div>
-                        <PrimaryButton
-                            type="submit"
-                            className="mt-4"
-                            disabled={processing}
-                        >
-                            Создать
-                        </PrimaryButton>
+                        <div className="mt-4 flex items-center">
+                            <PrimaryButton
+                                type="submit"
+                                className="mr-4"
+                                disabled={processing}
+                            >
+                                {supplier ? "Сохранить" : "Создать"}
+                            </PrimaryButton>
+                            <Link href={route("suppliers.index")}>Отмена</Link>
+                        </div>
                     </form>
                 </Paper>
             </Container>

@@ -1,19 +1,23 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
 import NavLink from "./NavLink";
+import { MdOutlineDataThresholding } from "react-icons/md";
+import { MdOutlineLocalShipping } from "react-icons/md";
 
 export const Sidebar = () => {
     return (
-        <div className="w-60 grow overflow-y-auto flex flex-col overflow-hidden py-6 px-3 h-screen bg-white">
+        <div className="w-72 grow overflow-y-auto flex flex-col overflow-hidden py-6 px-3 h-screen bg-white">
             <NavLink
                 href={route("dashboard")}
                 active={route().current("dashboard")}
+                icon={<MdOutlineDataThresholding size={24} />}
             >
                 Панель мониторинга
             </NavLink>
             <NavLink
                 href={route("suppliers.index")}
-                active={route().current("suppliers")}
+                active={route().current("suppliers.*")}
+                icon={<MdOutlineLocalShipping size={24} />}
             >
                 Поставщики
             </NavLink>

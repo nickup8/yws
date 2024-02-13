@@ -38,6 +38,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('suppliers', [SupplierController::class, 'index'])->middleware(['auth', 'verified'])->name('suppliers.index');
 Route::get('suppliers/new', [SupplierController::class, 'create'])->middleware(['auth', 'verified'])->name('suppliers.new');
+Route::get('suppliers/edit/{id}', [SupplierController::class, 'edit'])->middleware(['auth', 'verified'])->name('suppliers.edit');
 Route::post('suppliers/store', [SupplierController::class, 'store'])->middleware(['auth', 'verified'])->name('suppliers.store');
+Route::patch('suppliers/edit/{id}', [SupplierController::class, 'update'])->middleware(['auth', 'verified'])->name('suppliers.update');
+Route::get('suppliers/{id}', [SupplierController::class, 'show'])->middleware(['auth', 'verified'])->name('suppliers.show');
+
 
 require __DIR__ . '/auth.php';
