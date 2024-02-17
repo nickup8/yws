@@ -9,6 +9,8 @@ import { Sidebar } from "@/Components/Sidebar";
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    const [driwerOpen, setDriwerOpen] = useState(true);
+    const handleDriwerOpen = () => [setDriwerOpen(!driwerOpen)];
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100 fixed top-0 w-full">
@@ -16,7 +18,10 @@ export default function Authenticated({ user, header, children }) {
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
-                                <button className="mr-3">
+                                <button
+                                    className="mr-3"
+                                    onClick={handleDriwerOpen}
+                                >
                                     <svg
                                         width="20"
                                         height="20"
@@ -198,7 +203,7 @@ export default function Authenticated({ user, header, children }) {
             )} */}
 
             <div className="flex pt-16">
-                <Sidebar />
+                {driwerOpen && <Sidebar />}
                 <main className="w-full grow h-screen overflow-auto">
                     {children}
                 </main>

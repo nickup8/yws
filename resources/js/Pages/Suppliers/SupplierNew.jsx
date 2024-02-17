@@ -9,16 +9,7 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function SupplierNew({ auth, supplier }) {
-    const {
-        data,
-        setData,
-        post,
-        patch,
-        processing,
-        errors,
-        reset,
-        setDefaults,
-    } = useForm({
+    const { data, setData, post, patch, processing, errors } = useForm({
         code: supplier && supplier.code ? supplier.code : "",
         inn: supplier && supplier.inn ? supplier.inn : "",
         title: supplier && supplier.title ? supplier.title : "",
