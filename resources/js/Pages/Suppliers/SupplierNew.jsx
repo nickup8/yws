@@ -8,7 +8,7 @@ import { H1 } from "@/Components/Typography/H1";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function SupplierNew({ auth, supplier }) {
+function SupplierNew({ supplier }) {
     const { data, setData, post, patch, processing, errors } = useForm({
         code: supplier && supplier.code ? supplier.code : "",
         inn: supplier && supplier.inn ? supplier.inn : "",
@@ -35,7 +35,7 @@ export default function SupplierNew({ auth, supplier }) {
         patch(route("suppliers.update", supplier.id));
     };
     return (
-        <Authenticated user={auth.user}>
+        <>
             <Head title={supplier ? supplier.title : "Новый поставщик"} />
             <Container>
                 <H1>{supplier ? supplier.title : "Новый поставщик"}</H1>
@@ -240,6 +240,12 @@ export default function SupplierNew({ auth, supplier }) {
                     </form>
                 </Paper>
             </Container>
-        </Authenticated>
+        </>
     );
 }
+
+SupplierNew.layout = (page) => (
+    <Authenticated children={page} user={page.props.auth.user} />
+);
+
+export default SupplierNew;

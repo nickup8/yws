@@ -7,10 +7,9 @@ import { MdOutlineVisibility } from "react-icons/md";
 import { IconLink } from "@/Components/UI/IconButtons/IconLink";
 import { MdOutlineCreate } from "react-icons/md";
 
-export default function Suppliers({ suppliers, auth }) {
+function Suppliers({ suppliers }) {
     return (
-        <Authenticated user={auth.user}>
-            <Head title="Поставщики" />
+        <>
             <Container>
                 <div className="flex justify-between">
                     <H1>Поставщики</H1>
@@ -97,6 +96,16 @@ export default function Suppliers({ suppliers, auth }) {
                     )}
                 </Paper>
             </Container>
-        </Authenticated>
+        </>
     );
 }
+
+Suppliers.layout = (page) => (
+    <Authenticated
+        user={page.props.auth.user}
+        children={page}
+        title="Поставщики"
+    />
+);
+
+export default Suppliers;

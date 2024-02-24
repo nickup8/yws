@@ -1,18 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Authenticated from "@/Layouts/AuthenticatedLayout";
+
 import { Head } from "@inertiajs/react";
 
-export default function Dashboard({ auth }) {
+function Dashboard({ auth }) {
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Dashboard
-                </h2>
-            }
-        >
-            <Head title="Dashboard" />
-
+        <>
             <div className="py-12">
                 <div className="w-full mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -22,6 +15,16 @@ export default function Dashboard({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </>
     );
 }
+
+Dashboard.layout = (page) => (
+    <Authenticated
+        user={page.props.auth.user}
+        children={page}
+        title="Панель мониторинга"
+    />
+);
+
+export default Dashboard;
