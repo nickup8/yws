@@ -20,19 +20,19 @@ class UserSeeder extends Seeder
             "first_name" => "Николай",
             "login" => "4500",
             "password" => Hash::make("Komax1230"),
-        ])->assignRole(["admin"]);
+        ])->assignRole(["Администратор"]);
 
         User::create([
             "last_name" => "Пупкин",
             "first_name" => "Василий",
             "login" => "4501",
             "password" => Hash::make("Komax1230"),
-        ])->assignRole("logistic");
+        ])->assignRole("Логистика");
         User::create([
             "last_name" => "Петров",
             "first_name" => "Иван",
             "login" => "4502",
             "password" => Hash::make("Komax1230"),
-        ])->assignRole("engineer");
+        ])->assignRole("Инженер-технолог");
     }
 }

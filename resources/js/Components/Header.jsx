@@ -11,7 +11,7 @@ export default function Header({ open, header }) {
     return (
         <div
             className={
-                "flex items-center justify-between bg-gray-800 text-gray-200 px-4 py-4 shadow-sm rounded-lg mr-4 " +
+                "flex items-center justify-between bg-gray-800 text-gray-200 p-6 shadow-sm rounded-lg mr-4 " +
                 (open ? " ml-64" : "ml-4")
             }
         >

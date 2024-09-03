@@ -1,5 +1,5 @@
 import Header from "@/Components/Header";
-import SideBar from "@/Components/SideBAr";
+import SideBar from "@/Components/SideBar";
 import { useState } from "react";
 
 export default function AdminLayout({ children, header }) {
