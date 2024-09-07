@@ -11,7 +11,7 @@ class StoreSupplierRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreSupplierRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'supplier_name' => ['required', 'string', 'max:255'],
+            'supplier_code' => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
@@ -14,7 +15,22 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Supplier/SupplierIndex');
+        $query = Supplier::query();
+        $sortField = request('sort_field', 'created_at');
+        $sortDirection = request('sort_direction', 'asc');
+        if (request('supplier_code')) {
+            $query->where('supplier_code', 'like', '%' . request()->supplier_code . '%');
+        }
+        if (request('supplier_name')) {
+            $query->where('supplier_name', 'like', '%' . request()->supplier_name . '%');
+        }
+        $suppliers = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+
+        return Inertia::render('Supplier/SupplierIndex', [
+            'suppliers' => SupplierResource::collection($suppliers),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success')
+        ]);
     }
 
     /**
@@ -30,7 +46,9 @@ class SupplierController extends Controller
      */
     public function store(StoreSupplierRequest $request)
     {
-        //
+        $data = $request->validated();
+        Supplier::create($data);
+        return redirect()->route('suppliers.index');
     }
 
     /**
@@ -46,7 +64,9 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        return Inertia::render('Supplier/SupplierCreate', [
+            'supplier' => new SupplierResource($supplier)
+        ]);
     }
 
     /**
@@ -54,7 +74,9 @@ class SupplierController extends Controller
      */
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
-        //
+        $data = $request->validated();
+        $supplier->update($data);
+        return redirect()->route('suppliers.index');
     }
 
     /**
@@ -62,6 +84,10 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $name = $supplier->supplier_name;
+        $supplier->delete();
+
+        return to_route('suppliers.index')
+            ->with('success', "Task \"$name\" was deleted");
     }
 }

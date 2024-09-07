@@ -17,8 +17,21 @@ import { Transition } from "@headlessui/react";
 import Collaps from "./Collaps";
 
 export default function SideBar() {
-    const [settingsOpen, setSettingsOpen] = useState(false);
-    const [documentsOpen, setDocumentsOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(
+        sessionStorage.getItem("settingsOpen") === "true"
+    );
+    const [documentsOpen, setDocumentsOpen] = useState(
+        sessionStorage.getItem("documentsOpen") === "true"
+    );
+
+    const toggleSettings = () => {
+        setSettingsOpen(!settingsOpen);
+        sessionStorage.setItem("settingsOpen", !settingsOpen);
+    };
+    const toggleDocuments = () => {
+        setDocumentsOpen(!documentsOpen);
+        sessionStorage.setItem("documentsOpen", !documentsOpen);
+    };
     return (
         <div className="shadow-sm p-4 fixed top-0 left-0 flex flex-col justify-between w-60 min-h-screen h-full overflow-y-auto overflow-x-hidden bg-white">
             <div>
@@ -38,7 +51,7 @@ export default function SideBar() {
                         open={documentsOpen}
                         icon={<ClipboardDocumentIcon />}
                         title="Документы"
-                        setOpen={setDocumentsOpen}
+                        setOpen={toggleDocuments}
                     >
                         <MenuItem>Накладные</MenuItem>
                     </Collaps>
@@ -47,7 +60,7 @@ export default function SideBar() {
                         open={settingsOpen}
                         icon={<WrenchScrewdriverIcon />}
                         title="Настройки"
-                        setOpen={setSettingsOpen}
+                        setOpen={toggleSettings}
                     >
                         <MenuItem href={route("suppliers.index")}>
                             Поставщики

@@ -29,16 +29,15 @@ Route::group(['middleware' => ['auth', 'role:Логистика|Админист
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
-    Route::get('/suppliers/new', [SupplierController::class, 'create'])->name('suppliers.create');
-    Route::get('/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
-    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
-    Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
-    Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/new', [UserController::class, 'create'])->name('users.create');
 
+});
+
+Route::group(['middleware' => ['auth', 'role:Администратор|Логистика']], function () {
+    Route::resource('suppliers', SupplierController::class);
 });
 
 Route::group(['middleware' => ['auth', 'role:Администратор|Инженер-технолог']], function () {
