@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "./ApplicationLogo";
 import MenuItem from "./MenuItem";
 import {
@@ -24,6 +24,8 @@ export default function SideBar() {
         sessionStorage.getItem("documentsOpen") === "true"
     );
 
+    const user = usePage().props.auth.user;
+
     const toggleSettings = () => {
         setSettingsOpen(!settingsOpen);
         sessionStorage.setItem("settingsOpen", !settingsOpen);
@@ -32,6 +34,7 @@ export default function SideBar() {
         setDocumentsOpen(!documentsOpen);
         sessionStorage.setItem("documentsOpen", !documentsOpen);
     };
+    console.log(user);
     return (
         <div className="shadow-sm p-4 fixed top-0 left-0 flex flex-col justify-between w-60 min-h-screen h-full overflow-y-auto overflow-x-hidden bg-white">
             <div>
@@ -46,25 +49,29 @@ export default function SideBar() {
                     </MenuItem>
                     <MenuItem icon={<HomeModernIcon />}>Склад</MenuItem>
                     <MenuItem icon={<HashtagIcon />}>Фидинг</MenuItem>
-
-                    <Collaps
-                        open={documentsOpen}
-                        icon={<ClipboardDocumentIcon />}
-                        title="Документы"
-                        setOpen={toggleDocuments}
-                    >
-                        <MenuItem>Накладные</MenuItem>
-                    </Collaps>
-
+                    {(user.roles[0].name === "Администратор" ||
+                        user.roles[0].name === "Логистика") && (
+                        <Collaps
+                            open={documentsOpen}
+                            icon={<ClipboardDocumentIcon />}
+                            title="Документы"
+                            setOpen={toggleDocuments}
+                        >
+                            <MenuItem>Накладные</MenuItem>
+                        </Collaps>
+                    )}
                     <Collaps
                         open={settingsOpen}
                         icon={<WrenchScrewdriverIcon />}
                         title="Настройки"
                         setOpen={toggleSettings}
                     >
-                        <MenuItem href={route("suppliers.index")}>
-                            Поставщики
-                        </MenuItem>
+                        {(user.roles[0].name === "Администратор" ||
+                            user.roles[0].name === "Логистика") && (
+                            <MenuItem href={route("suppliers.index")}>
+                                Поставщики
+                            </MenuItem>
+                        )}
                         <MenuItem href={route("users.index")}>
                             Пользователи
                         </MenuItem>

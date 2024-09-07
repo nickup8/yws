@@ -23,15 +23,11 @@ export default function Collaps({ children, icon, title, open, setOpen }) {
                     {children.length ? (
                         children.map((child, index) => (
                             <div key={index} className="flex items-center">
-                                <div className="border-b border-gray-300 w-4"></div>
                                 {child}
                             </div>
                         ))
                     ) : (
-                        <div className="flex items-center">
-                            <div className="border-b border-gray-300 w-4"></div>
-                            {children}
-                        </div>
+                        <div className="flex items-center">{children}</div>
                     )}
                 </div>
             </Transition>
