@@ -34,7 +34,6 @@ export default function SideBar() {
         setDocumentsOpen(!documentsOpen);
         sessionStorage.setItem("documentsOpen", !documentsOpen);
     };
-    console.log(user);
     return (
         <div className="shadow-sm p-4 fixed top-0 left-0 flex flex-col justify-between w-60 min-h-screen h-full overflow-y-auto overflow-x-hidden bg-white">
             <div>
@@ -68,21 +67,35 @@ export default function SideBar() {
                     >
                         {(user.roles[0].name === "Администратор" ||
                             user.roles[0].name === "Логистика") && (
-                            <MenuItem href={route("suppliers.index")}>
+                            <MenuItem
+                                active={route().current("suppliers.*")}
+                                href={route("suppliers.index")}
+                            >
                                 Поставщики
                             </MenuItem>
                         )}
-                        <MenuItem href={route("users.index")}>
-                            Пользователи
-                        </MenuItem>
-                        <MenuItem href={route("machines.index")}>
+                        {user.roles[0].name === "Администратор" && (
+                            <MenuItem
+                                active={route().current("users.*")}
+                                href={route("users.index")}
+                            >
+                                Пользователи
+                            </MenuItem>
+                        )}
+                        <MenuItem
+                            active={route().current("machines.*")}
+                            href={route("machines.index")}
+                        >
                             Оборудование
                         </MenuItem>
                         <MenuItem href={route("machines.index")}>
                             Склады
                         </MenuItem>
                         <MenuItem>МХ склад</MenuItem>
-                        <MenuItem href={route("storages_feeding.index")}>
+                        <MenuItem
+                            active={route().current("storages_feeding.*")}
+                            href={route("storages_feeding.index")}
+                        >
                             МХ фидинг
                         </MenuItem>
                     </Collaps>

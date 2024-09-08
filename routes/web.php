@@ -49,12 +49,7 @@ Route::group(['middleware' => ['auth', 'role:Администратор|Инже
     Route::delete('/machines/{machine}', [MachineController::class, 'destroy'])->name('machines.destroy');
     Route::get('/machines/settings', [MachineController::class, 'settings_index'])->name('machines.settings');
 
-    Route::get('/storages_feeding', [StorageFeedingController::class, 'index'])->name('storages_feeding.index');
-    Route::get('/storages_feeding/new', [StorageFeedingController::class, 'create'])->name('storages_feeding.create');
-    Route::post('/storages_feeding', [StorageFeedingController::class, 'store'])->name('storages_feeding.store');
-    Route::get('/storages_feeding/{storage_feeding}/edit', [StorageFeedingController::class, 'edit'])->name('storages_feeding.edit');
-    Route::put('/storages_feeding/{storage_feeding}', [StorageFeedingController::class, 'update'])->name('storages_feeding.update');
-    Route::delete('/storages_feeding/{storage_feeding}', [StorageFeedingController::class, 'destroy'])->name('storages_feeding.destroy');
+    Route::resource('storages_feeding', StorageFeedingController::class);
 });
 
 

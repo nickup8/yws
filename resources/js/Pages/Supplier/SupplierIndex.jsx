@@ -15,6 +15,7 @@ import Modal from "@/Components/Modal";
 import { useState } from "react";
 import { space } from "postcss/lib/list";
 import TableHeading from "@/Components/TableHeading";
+import DeleteButton from "@/Components/DeleteButton";
 export default function SupplierIndex({ suppliers, queryParams = null }) {
     queryParams = queryParams || {};
     const [open, setOpen] = useState(false);
@@ -190,22 +191,15 @@ export default function SupplierIndex({ suppliers, queryParams = null }) {
                                                                     </span>
                                                                 </span>
                                                             </Dropdown.Link>
-                                                            <button
+
+                                                            <DeleteButton
                                                                 onClick={() =>
                                                                     modalSupplier(
                                                                         supplier.id,
                                                                         supplier.supplier_name
                                                                     )
                                                                 }
-                                                                className="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
-                                                            >
-                                                                <span className="flex space-x-2 text-red-500 hover:text-red-600 transition ">
-                                                                    <TrashIcon className="w-5 h-5" />
-                                                                    <span>
-                                                                        Удалить
-                                                                    </span>
-                                                                </span>
-                                                            </button>
+                                                            />
                                                         </Dropdown.Content>
                                                     </Dropdown>
                                                 </div>
