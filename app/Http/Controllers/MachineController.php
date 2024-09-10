@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMachineRequest;
+use App\Http\Requests\UpdateMachineRequest;
+use App\Http\Resources\MachineResource;
 use App\Models\Machine;
+use DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +17,24 @@ class MachineController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Machine/MachineIndex');
+        $query = Machine::query();
+        $sortField = request('sort_field', 'created_at');
+        $sortDirection = request('sort_direction', 'asc');
+        if(request('name')){
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+        if(request('project')){
+            $query->where('project', 'like', '%' . request('project') . '%');
+        }
+        if(request('area')){
+            $query->where('area', 'like', '%' . request('area') . '%');
+        }
+        $machines = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+        return Inertia::render('Machine/MachineIndex', [
+            'machines' => MachineResource::collection($machines),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success')
+        ]);
     }
 
     /**
@@ -21,15 +42,22 @@ class MachineController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Machine/MachineForm');
+        $areas = DB::table('storage_feedings')->pluck('area')->unique()->sort()->values();
+
+        return Inertia::render('Machine/MachineForm', [
+            'areas' => $areas
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMachineRequest $request)
     {
-        //
+        $data = $request->validated();
+        $name = $data['name'];
+        Machine::create($data);
+        return redirect()->route('machines.index')->with('success', "Оборудование \"$name\" добавлено");
     }
 
     /**
@@ -45,15 +73,23 @@ class MachineController extends Controller
      */
     public function edit(Machine $machine)
     {
-        //
+        $areas = DB::table('storage_feedings')->pluck('area')->unique()->sort()->values();
+        return Inertia::render('Machine/MachineForm', [
+            'machines' => new MachineResource($machine),
+            'areas' => $areas
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Machine $machine)
+    public function update(UpdateMachineRequest $request, Machine $machine)
     {
-        //
+        $data = $request->validated();
+        $name = $data['name'];
+        $machine->update($data);
+        return redirect()->route('machines.index')->with('success', "Оборудование \"$name\" обновлено");
+
     }
 
     /**

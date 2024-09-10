@@ -102,7 +102,7 @@ export default function SideBar() {
                 </div>
             </div>
             <div className="w-full flex-none text-center text-xs text-gray-400 mt-6">
-                <div>ЯзакиВолга - управление проводами</div>
+                <div>ЯзакиВолга - фидинг система</div>
                 <div> {new Date().getFullYear()} - Версия: 0.0.1</div>
             </div>
         </div>

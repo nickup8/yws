@@ -41,13 +41,8 @@ Route::group(['middleware' => ['auth', 'role:Администратор|Логи
 });
 
 Route::group(['middleware' => ['auth', 'role:Администратор|Инженер-технолог']], function () {
-    Route::get('/machines', [MachineController::class, 'index'])->name('machines.index');
-    Route::get('/machines/new', [MachineController::class, 'create'])->name('machines.create');
-    Route::post('/machines', [MachineController::class, 'store'])->name('machines.store');
-    Route::get('/machines/{machine}/edit', [MachineController::class, 'edit'])->name('machines.edit');
-    Route::put('/machines/{machine}', [MachineController::class, 'update'])->name('machines.update');
-    Route::delete('/machines/{machine}', [MachineController::class, 'destroy'])->name('machines.destroy');
-    Route::get('/machines/settings', [MachineController::class, 'settings_index'])->name('machines.settings');
+    Route::resource('machines', MachineController::class);
+    Route::get('/machines/{machine}/settings', [MachineController::class, 'settings_index'])->name('machines.settings');
 
     Route::resource('storages_feeding', StorageFeedingController::class);
 });

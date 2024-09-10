@@ -1,39 +1,36 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
+import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AdminLayout from "@/Layouts/AdminLayout";
 
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { useState } from "react";
 
-const area = [
-    {
-        id: 1,
-        number: 1,
-        title: "Зона 1",
-    },
-    {
-        id: 2,
-        number: 2,
-        title: "Зона 2",
-    },
-    {
-        id: 3,
-        number: 3,
-        title: "Зона 3",
-    },
-];
-export default function MachineForm() {
-    const [selectedArea, setSelectedArea] = useState(area[0]);
-    const { data, setData, post, processing, errors, reset } = useForm();
+export default function MachineForm({ areas, machines }) {
+    const { data, setData, post, put, processing, errors, reset, selected } =
+        useForm({
+            name: machines ? machines.data.name : "",
+            project: machines ? machines.data.project : "",
+            area: machines ? machines.data.area : "",
+        });
+
     const submitMachines = (e) => {
         e.preventDefault();
-        console.log(data);
+        machines
+            ? put(route("machines.update", machines.data.id))
+            : post(route("machines.store"));
     };
+
     return (
         <>
-            <Head title="Добавить оборудование" />
+            <Head
+                title={
+                    machines ? "Изменить оборудование" : "Добавить оборудование"
+                }
+            />
             <div className="bg-white shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                     <form noValidate onSubmit={submitMachines}>
@@ -50,6 +47,7 @@ export default function MachineForm() {
                                     className="block w-full"
                                     name="name"
                                     value={data.name}
+                                    error={errors.name}
                                     onChange={(e) =>
                                         setData("name", e.target.value)
                                     }
@@ -71,42 +69,59 @@ export default function MachineForm() {
                                     type="text"
                                     className="block w-full"
                                     name="project"
+                                    error={errors.project}
                                     value={data.project}
                                     onChange={(e) =>
                                         setData("project", e.target.value)
                                     }
                                     required
                                 />
+                                <InputError
+                                    message={errors.project}
+                                    className="mt-2"
+                                />
                             </div>
                             <div className="w-full">
                                 <InputLabel
                                     htmlFor="area"
-                                    value="Проект"
+                                    value="Зона"
                                     className="mb-2"
                                 />
-                                <select
-                                    name="area"
+
+                                <SelectInput
+                                    options={
+                                        ({ value: "", label: "Выберите зону" },
+                                        areas.map((area) => {
+                                            return {
+                                                value: area,
+                                                label: `Зона ${area}`,
+                                            };
+                                        }))
+                                    }
+                                    optionDefault={{
+                                        value: "",
+                                        label: "Выберите зону",
+                                    }}
+                                    name={"area"}
                                     value={data.area}
+                                    error={errors.area}
                                     onChange={(e) =>
                                         setData("area", e.target.value)
                                     }
-                                    className="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                >
-                                    <option value="" disabled>
-                                        Выберите зону
-                                    </option>
-                                    {area.map((area) => (
-                                        <option key={area.id} value={area.id}>
-                                            {area.title}
-                                        </option>
-                                    ))}
-                                </select>
+                                />
+                                <InputError
+                                    message={errors.area}
+                                    className="mt-2"
+                                />
                             </div>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-4 flex space-x-3">
                             <PrimaryButton type="submit">
-                                Добавить
+                                {machines ? "Сохранить" : "Добавить"}
                             </PrimaryButton>
+                            <Link href={route("machines.index")}>
+                                <SecondaryButton>Отмена</SecondaryButton>
+                            </Link>
                         </div>
                     </form>
                 </div>
@@ -118,6 +133,15 @@ export default function MachineForm() {
     );
 }
 
-MachineForm.layout = (page) => (
-    <AdminLayout children={page} header="Добавить оборудование" />
-);
+MachineForm.layout = (page) => {
+    return (
+        <AdminLayout
+            children={page}
+            header={
+                page.props.machines
+                    ? "Изменить оборудование"
+                    : "Добавить оборудование"
+            }
+        />
+    );
+};

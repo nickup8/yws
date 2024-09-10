@@ -14,6 +14,11 @@ class MachineResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'project' => $this->project,
+            'area' => $this->area
+        ];
     }
 }
